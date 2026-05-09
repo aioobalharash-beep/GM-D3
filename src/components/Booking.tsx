@@ -729,23 +729,31 @@ export const Booking: React.FC = () => {
   if (loading) return <div className="p-8 animate-pulse"><div className="h-96 bg-primary-navy/5 rounded-xl" /></div>;
 
   return (
-    <div className="px-4 py-6 sm:px-6 space-y-10 max-w-lg mx-auto">
-      {/* Back Button */}
+    // Sand & Sage booking layout — a single sheet of "paper" resting on the
+    // soft-beige page. The back button sits OUTSIDE the sheet so it reads as
+    // page chrome, while the form (sections separated by space-y-10) lives on
+    // the white card.
+    <div className="px-4 py-8 sm:px-6 max-w-2xl mx-auto fade-in-up">
       <button
         onClick={() => navigate('/')}
-        className="flex items-center gap-2 text-primary-navy/60 hover:text-primary-navy transition-colors text-sm font-medium"
+        className="flex items-center gap-2 mb-6 text-charcoal/60 hover:text-sage transition-colors duration-500 text-sm"
       >
         <ArrowLeft size={18} />
         {t('login.backToHome')}
       </button>
 
-      <section className="text-center space-y-2">
-        <span className="text-secondary-gold font-bold tracking-widest text-[10px] uppercase">{t('booking.bookYourStay')}</span>
-        <h2 className="font-headline text-2xl sm:text-4xl font-bold text-primary-navy">{t('booking.selectDates')}</h2>
-        <p className="text-primary-navy/60 text-sm max-w-xs mx-auto">
-          {t('booking.selectDatesDesc', { name: property?.name || t('common.alMalak') })}
-        </p>
-      </section>
+      <div className="paper-sheet px-5 py-8 sm:px-10 sm:py-12 space-y-10">
+        <section className="text-center space-y-3">
+          <span className="text-clay font-medium tracking-[0.3em] text-[10px] uppercase">
+            {t('booking.bookYourStay')}
+          </span>
+          <h2 className="font-headline text-3xl sm:text-4xl font-normal text-charcoal leading-tight">
+            {t('booking.selectDates')}
+          </h2>
+          <p className="text-charcoal/60 text-sm leading-relaxed max-w-sm mx-auto">
+            {t('booking.selectDatesDesc', { name: property?.name || t('common.alMalak') })}
+          </p>
+        </section>
 
       {/* Maintenance Mode Banner */}
       {maintenanceMode && (
@@ -1485,6 +1493,7 @@ export const Booking: React.FC = () => {
           </p>
         </div>
       </div>
+      </div>{/* /paper-sheet */}
 
       {/* Terms of Stay Modal */}
       <AnimatePresence>

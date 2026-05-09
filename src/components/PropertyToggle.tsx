@@ -70,26 +70,29 @@ export const PropertyToggle: React.FC<PropertyToggleProps> = ({
 
   const usePillLayout = layout === 'auto' && properties.length === 2;
 
+  // Sand & Sage — pill track is soft white on a sage-tinted border, the active
+  // segment is deep sage with white text. Dark variant inverts onto a sage
+  // surface for use on tinted hero headers.
   const baseColors = variant === 'dark'
     ? {
-        track: 'bg-white/10 border border-white/15',
+        track: 'bg-white/10 border border-white/20 backdrop-blur-sm',
         inactive: 'text-white/70 hover:text-white',
-        activeBg: 'bg-secondary-gold',
-        activeText: 'text-primary-navy',
+        activeBg: 'bg-sage',
+        activeText: 'text-white',
         chevron: 'text-white/70',
-        menuBg: 'bg-primary-navy text-white border border-white/10',
+        menuBg: 'bg-charcoal text-white border border-white/10',
         menuItem: 'text-white/70 hover:bg-white/5',
-        menuItemActive: 'bg-secondary-gold/20 text-secondary-gold',
+        menuItemActive: 'bg-sage/30 text-white',
       }
     : {
-        track: 'bg-pearl-white border border-primary-navy/10',
-        inactive: 'text-primary-navy/50 hover:text-primary-navy',
-        activeBg: 'bg-primary-navy',
+        track: 'bg-white/80 border border-sage/20 shadow-[0_2px_10px_rgba(0,0,0,0.04)] backdrop-blur-sm',
+        inactive: 'text-charcoal/55 hover:text-charcoal',
+        activeBg: 'bg-sage',
         activeText: 'text-white',
-        chevron: 'text-primary-navy/50',
-        menuBg: 'bg-white text-primary-navy border border-primary-navy/10 shadow-xl',
-        menuItem: 'text-primary-navy/70 hover:bg-primary-navy/5',
-        menuItemActive: 'bg-secondary-gold/15 text-primary-navy',
+        chevron: 'text-charcoal/50',
+        menuBg: 'bg-white text-charcoal border border-sage/15 shadow-[0_10px_40px_rgba(74,74,74,0.08)]',
+        menuItem: 'text-charcoal/70 hover:bg-sage/5',
+        menuItemActive: 'bg-sage/15 text-sage-deep',
       };
 
   if (usePillLayout) {
@@ -100,7 +103,7 @@ export const PropertyToggle: React.FC<PropertyToggleProps> = ({
         className={cn(
           // Equal-width grid columns keep both pills the same size so the
           // animated active background doesn't jump width when switching.
-          'relative inline-grid grid-cols-2 items-center rounded-full p-1 text-[11px] sm:text-xs font-bold uppercase tracking-wider',
+          'relative inline-grid grid-cols-2 items-center rounded-full p-1 text-[11px] sm:text-xs font-medium uppercase tracking-[0.18em]',
           baseColors.track,
           className,
         )}
@@ -115,15 +118,20 @@ export const PropertyToggle: React.FC<PropertyToggleProps> = ({
               aria-selected={isActive}
               onClick={() => setActivePropertyId(p.id)}
               className={cn(
-                'relative whitespace-nowrap px-3 sm:px-4 py-1.5 rounded-full transition-colors duration-200 z-10',
+                'relative whitespace-nowrap px-4 sm:px-5 py-1.5 rounded-full z-10',
+                'transition-colors duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]',
                 isActive ? baseColors.activeText : baseColors.inactive,
               )}
             >
               {isActive && (
                 <motion.span
                   layoutId="property-toggle-pill"
-                  transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                  className={cn('absolute inset-0 rounded-full -z-10', baseColors.activeBg)}
+                  // Slow, organic glide instead of a snappy spring.
+                  transition={{ type: 'tween', duration: 0.55, ease: [0.25, 0.1, 0.25, 1] }}
+                  className={cn(
+                    'absolute inset-0 rounded-full -z-10 shadow-[0_4px_14px_rgba(112,130,56,0.25)]',
+                    baseColors.activeBg,
+                  )}
                 />
               )}
               <span className="relative">{label}</span>

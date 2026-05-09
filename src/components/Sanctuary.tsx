@@ -300,40 +300,56 @@ export const Sanctuary: React.FC = () => {
 
   return (
     <div className="space-y-12 pb-12">
-      {/* Hero Gallery — keyed by active property so React tears down + re-mounts
-          the section on switch, giving guests a clear visual transition. */}
+      {/* Sand & Sage property cards — portrait images with the property name
+          and nightly price centered underneath in serif text. The whole section
+          fades in on mount and re-keys on property switch. */}
       <motion.section
         key={activePropertyId || 'default'}
-        initial={{ opacity: 0, y: 8 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.25 }}
+        transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
         className="px-6 mt-8"
       >
-        <div className="flex justify-between items-end mb-6">
-          <div>
-            <span className="text-secondary-gold font-bold tracking-widest text-[10px] uppercase block mb-1">{t('sanctuary.estatePreview')}</span>
-            <h2 className="font-headline text-3xl font-bold text-primary-navy">{bl(data.name, lang)}</h2>
-          </div>
+        <div className="text-center mb-8">
+          <span className="text-clay font-medium tracking-[0.3em] text-[10px] uppercase block mb-2">
+            {t('sanctuary.estatePreview')}
+          </span>
+          <h2 className="font-headline text-4xl font-normal text-charcoal">
+            {bl(data.name, lang)}
+          </h2>
         </div>
 
-        <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar gap-4 pb-4">
+        <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar gap-6 pb-6">
           {data.gallery.map((img, i) => (
-            <motion.div
+            <motion.figure
               key={i}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className="flex-none w-[85vw] md:w-[600px] snap-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.12, duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
+              className="flex-none w-[78vw] md:w-[360px] snap-center group"
             >
-              <OptimizedImage
-                src={img.url}
-                alt={img.label || ''}
-                className="aspect-[4/5] md:aspect-video rounded-[20px] bg-primary-navy/5 shadow-sm"
-              />
-              {img.label && img.label.trim() !== '' && (
-                <p className="mt-3 font-bold text-primary-navy/80 text-sm px-1">{img.label}</p>
-              )}
-            </motion.div>
+              <div className="overflow-hidden rounded-3xl bg-white shadow-[0_4px_20px_rgba(0,0,0,0.05)] organic-hover">
+                <OptimizedImage
+                  src={img.url}
+                  alt={img.label || ''}
+                  className="aspect-[3/4] w-full bg-soft-beige transition-transform duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-[1.03]"
+                />
+              </div>
+              <figcaption className="mt-5 text-center px-2">
+                {img.label && img.label.trim() !== '' && (
+                  <h3 className="font-headline text-xl text-charcoal font-normal leading-snug">
+                    {img.label}
+                  </h3>
+                )}
+                <p className="mt-1.5 font-body text-sm text-charcoal/60 tracking-wide">
+                  <span className="text-sage-deep font-medium">
+                    {t('sanctuary.from')} {getMinPrice(data.pricing, data.nightly_rate)} {t('common.omr')}
+                  </span>
+                  <span className="text-charcoal/40"> · </span>
+                  <span>{t('common.perNight')}</span>
+                </p>
+              </figcaption>
+            </motion.figure>
           ))}
         </div>
       </motion.section>

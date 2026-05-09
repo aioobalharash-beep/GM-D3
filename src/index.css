@@ -1,17 +1,68 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Noto+Serif:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Lato:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Lora:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&family=Lato:wght@400;700&display=swap');
 @import "tailwindcss";
 
+/* ─── Sand & Sage — Organic Minimalist theme tokens ──────────────────────────
+   Charcoal stone for text (avoids the harshness of pure black), deep sage for
+   primary actions, terracotta clay for small status accents, off-white page
+   so cards in `bg-white` read as paper resting on sand. Existing tokens
+   (primary-navy, pearl-white, secondary-gold) are remapped so the codebase
+   adopts the palette without a sweeping rename; new explicit tokens (sage,
+   charcoal, clay, beige) are exposed for new components. */
 @theme {
-  --font-headline: "Noto Serif", serif;
-  --font-body: "Plus Jakarta Sans", sans-serif;
+  --font-headline: "Playfair Display", "Lora", serif;
+  --font-body: "Inter", "Quicksand", sans-serif;
   --font-lato: "Lato", sans-serif;
   --font-arabic: "IBM Plex Sans Arabic", sans-serif;
 
-  --color-primary-navy: #5C3D1E;
-  --color-secondary-gold: #A67C52;
-  --color-pearl-white: #F0EBE4;
+  /* Legacy tokens — remapped so existing utility classes pick up Sand & Sage. */
+  --color-primary-navy: #4A4A4A;   /* charcoal stone (text) */
+  --color-secondary-gold: #708238; /* deep sage (primary accent) */
+  --color-pearl-white: #FAF9F6;    /* off-white page */
+
+  /* Explicit Sand & Sage tokens. */
+  --color-soft-beige: #F5F5DC;
+  --color-off-white: #FAF9F6;
+  --color-sage: #708238;
+  --color-sage-deep: #5A6A2D;
+  --color-charcoal: #4A4A4A;
+  --color-clay: #B87333;
 
   --radius-2xl: 1.25rem;
+  --radius-3xl: 1.75rem;
+
+  /* Diffused shadows so elements feel like they float on the page. */
+  --shadow-paper: 0 4px 20px rgba(0, 0, 0, 0.05);
+  --shadow-paper-lg: 0 10px 40px rgba(74, 74, 74, 0.08);
+
+  --ease-organic: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Subtle entrance for sections that scroll into view. */
+@keyframes sandSageFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in-up {
+  animation: sandSageFadeIn 0.7s var(--ease-organic, ease-out) both;
+}
+
+/* Card/button lift — slight rise + soft shadow swap. */
+.organic-hover {
+  transition: transform 0.4s var(--ease-organic, ease-out),
+              box-shadow 0.4s var(--ease-organic, ease-out),
+              background-color 0.4s var(--ease-organic, ease-out);
+}
+.organic-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-paper-lg);
+}
+
+/* Paper-sheet container used by the booking page. */
+.paper-sheet {
+  background: #ffffff;
+  border-radius: var(--radius-3xl);
+  box-shadow: var(--shadow-paper);
+  border: 1px solid rgba(74, 74, 74, 0.05);
 }
 
 @layer base {
@@ -27,10 +78,12 @@
   }
 
   body {
-    @apply bg-pearl-white text-primary-navy font-body antialiased;
+    @apply text-primary-navy font-body antialiased;
+    /* Soft beige page so white "paper" cards have something to float on. */
+    background-color: var(--color-soft-beige);
     overflow-x: hidden;
     max-width: 100%;
-    /* Prevent long words / URLs from blowing out containers */
+    line-height: 1.65;
     word-break: break-word;
     overflow-wrap: break-word;
   }
